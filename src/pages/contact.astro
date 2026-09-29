@@ -15,7 +15,20 @@ import { SITE } from '../data/site.js';
       </div>
 
       <div>
-      <p class="tirage-note" id="tirage-note" hidden>Demande de tirage : <strong id="tirage-name"></strong></p>
+      <div class="tirage-note" id="tirage-note" hidden>
+        <p>Demande de tirage : <strong id="tirage-name"></strong></p>
+        <ul class="formats-list" id="tirage-formats">
+          <li>
+            <input type="checkbox" id="format-1" value="30 × 40 cm dans un cadre aluminium noir (format encadré : 40 × 50 cm)" />
+            <label for="format-1">30 × 40 cm dans un cadre aluminium noir<span>Format encadré : 40 × 50 cm</span></label>
+          </li>
+          <li>
+            <input type="checkbox" id="format-2" value="40 × 50 cm dans un cadre aluminium noir (format encadré : 50 × 60 cm)" />
+            <label for="format-2">40 × 50 cm dans un cadre aluminium noir<span>Format encadré : 50 × 60 cm</span></label>
+          </li>
+        </ul>
+        <p class="formats-note">Possibilité d’avoir la photo seule, sans cadre.</p>
+      </div>
       <form class="form" id="contact-form" data-u={SITE.mailUser} data-d={SITE.mailDomain} novalidate>
         <div class="field">
           <label for="nom">Nom</label>
@@ -72,7 +85,7 @@ import { SITE } from '../data/site.js';
     if (tirage) {
       document.getElementById('sujet').value = `Demande de tirage : ${tirage}`;
       if (!msg.value) {
-        msg.value = `Bonjour,\n\nJe souhaiterais recevoir un devis pour un tirage de « ${tirage} ».\n\nFormat souhaité :\nUsage (décoration, cadeau, collection…) :\n\nMerci d’avance.`;
+        msg.value = `Bonjour,\n\nJe souhaiterais recevoir un devis pour un tirage de « ${tirage} ».\n\nUsage (décoration, cadeau, collection…) :\n\nMerci d’avance.`;
         count.textContent = `${msg.value.length} / 1500`;
       }
       document.getElementById('tirage-name').textContent = tirage;
@@ -92,7 +105,9 @@ import { SITE } from '../data/site.js';
       const d = new FormData(f);
       const to = `${f.dataset.u}@${f.dataset.d}`;
       const subject = String(d.get('sujet')).trim() || 'Message depuis jeanyvescaillot.com';
-      const body = `${String(d.get('message')).trim()}\n\n${String(d.get('nom')).trim()}\n${String(d.get('email')).trim()}`;
+      const formats = [...document.querySelectorAll('#tirage-formats input:checked')].map((cb) => cb.value);
+      const formatLine = formats.length ? `\n\nFormat(s) souhaité(s) :\n- ${formats.join('\n- ')}` : '';
+      const body = `${String(d.get('message')).trim()}${formatLine}\n\n${String(d.get('nom')).trim()}\n${String(d.get('email')).trim()}`;
       window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       status.textContent = `Votre messagerie s’ouvre. Si rien ne se passe, écrivez directement à ${to}.`;
     });
