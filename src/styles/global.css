@@ -401,6 +401,17 @@ img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -we
 .legal-date { color: var(--muted); font-size: 15px; margin-bottom: 2em; }
 
 /* ---------- Page Tirages ---------- */
+.formats { margin: 0 0 clamp(48px, 7vw, 88px); padding: clamp(24px, 4vw, 36px); border: 1px solid rgba(255,255,255,.22); }
+.formats-title { font: 500 12px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin: 0 0 22px; }
+.formats-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 16px; }
+.formats-list li { display: flex; align-items: flex-start; gap: 14px; }
+.formats-list input[type="checkbox"] { appearance: none; -webkit-appearance: none; flex: none; width: 20px; height: 20px; margin: 3px 0 0; border: 1px solid rgba(255,255,255,.7); background: transparent; cursor: pointer; position: relative; }
+.formats-list input[type="checkbox"]:hover { border-color: #fff; }
+.formats-list input[type="checkbox"]:checked { background: #fff; border-color: #fff; }
+.formats-list input[type="checkbox"]:checked::after { content: ''; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid #0b0b0b; border-width: 0 2px 2px 0; transform: rotate(40deg); }
+.formats-list label { font-size: 17px; line-height: 1.4; cursor: pointer; }
+.formats-list label span { display: block; font-size: 14px; color: var(--muted); margin-top: 3px; }
+.formats-note { margin: 0; font-size: 15px; color: var(--muted); }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 4vw, 56px); margin: 0 0 clamp(48px, 7vw, 96px); padding: 0; list-style: none; counter-reset: s; color: var(--ink-soft); }
 .steps li { border-top: 1px solid rgba(255,255,255,.55); padding-top: 18px; counter-increment: s; }
 .steps li::before { content: counter(s, decimal-leading-zero); display: block; font: 500 12px/1 var(--sans); letter-spacing: .18em; color: var(--muted); margin-bottom: 12px; }
