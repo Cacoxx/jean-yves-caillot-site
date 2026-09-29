@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site.js';
+import Mail from '../components/Mail.astro';
+---
+<Base title="Conditions d’utilisation" description="Conditions d’utilisation du site et protection des photographies de Jean-Yves Caillot.">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Informations légales</span><h1>Conditions d’utilisation</h1></header>
+    <div class="prose" style="padding-bottom:clamp(60px,9vw,120px)">
+      <h2 class="sub">Propriété intellectuelle</h2>
+      <p>Toutes les photographies et tous les contenus visuels publiés sur ce site sont la propriété exclusive de Jean-Yves Caillot, sauf mention contraire. Ils sont protégés par le Code de la propriété intellectuelle (articles L.111-1 et suivants). Toute reproduction, représentation, modification, publication, transmission ou exploitation, en tout ou partie, est strictement interdite sans l’autorisation écrite préalable de l’auteur.</p>
+      <p>Les photographies sont publiées en définition réduite et portent un filigrane. Leur affichage sur ce site ne constitue en aucun cas une cession de droits ni une licence d’utilisation.</p>
+
+      <h2 class="sub">Usages interdits</h2>
+      <ul>
+        <li>Reproduction ou copie des images sur tout support (numérique ou imprimé)</li>
+        <li>Capture d’écran, téléchargement ou extraction automatisée des images</li>
+        <li>Utilisation des images à des fins commerciales, publicitaires ou promotionnelles</li>
+        <li>Retouche, recadrage, suppression du filigrane ou intégration à d’autres œuvres sans autorisation</li>
+        <li>Publication sur les réseaux sociaux ou plateformes commerciales sans licence</li>
+        <li>Utilisation pour l’entraînement de systèmes d’intelligence artificielle ou de bases de données d’images</li>
+      </ul>
+
+      <h2 class="sub">Sanctions et recours</h2>
+      <ul>
+        <li>Suppression immédiate du contenu illicite</li>
+        <li>Indemnité pour l’utilisation non autorisée</li>
+        <li>Poursuites civiles et pénales si nécessaire (la contrefaçon est un délit puni par les articles L.335-2 et suivants du Code de la propriété intellectuelle)</li>
+      </ul>
+
+      <h2 class="sub">Demande d’autorisation, achat de tirage ou de licence, signalement</h2>
+      <p>Pour toute demande d’autorisation, d’achat de tirage, de licence d’utilisation ou pour signaler un usage non autorisé, écrivez à <Mail /> ou utilisez le <a href="/contact">formulaire de contact</a>.</p>
+
+      <h2 class="sub">Conditions de vente</h2>
+      <p>Ce site est une vitrine : il ne propose pas de vente en ligne. Les tirages et les licences d’utilisation sont proposés uniquement sur demande écrite. Chaque demande fait l’objet d’un devis précisant l’œuvre concernée, le format et le support, l’usage et la durée autorisés, le prix, les modalités de paiement et de livraison. La vente n’est parfaite qu’après acceptation écrite du devis et paiement. L’acquisition d’un tirage ne transfère pas les droits de reproduction de l’œuvre, qui demeurent la propriété de l’auteur.</p>
+
+      <h2 class="sub">Responsabilité et liens externes</h2>
+      <p>L’auteur s’efforce de fournir des informations exactes mais ne peut garantir l’absence d’erreurs. Les liens vers des sites tiers (articles de presse notamment) sont proposés à titre d’information ; l’auteur n’est pas responsable de leur contenu.</p>
+
+      <h2 class="sub">Droit applicable</h2>
+      <p>Les présentes conditions sont soumises au droit français. En cas de litige, et à défaut d’accord amiable, les tribunaux français seront seuls compétents.</p>
+
+      <p style="margin-top:2.4em;color:var(--muted);font-size:15px">© {SITE.year} Jean-Yves Caillot. Tous droits réservés. Reproduction interdite sans autorisation.</p>
+    </div>
+  </div>
+</Base>

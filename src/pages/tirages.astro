@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { TIRAGES } from '../data/site.js';
+---
+<Base dark title="Tirages" current="/tirages" description="Tirages argentiques noir et blanc de Jean-Yves Caillot : une sélection de photographies, disponibles sur demande et sur devis.">
+  <div class="wrap">
+    <header class="page-head split">
+      <div>
+        <span class="idx">Photographies à emporter</span>
+        <h1>Tirages</h1>
+      </div>
+      <div class="text">
+        <p>Certaines photographies de ce site existent en tirage, à accrocher chez soi ou à offrir. Voici une sélection.</p>
+        <p>Toutes les autres photographies sont consultables sur demande : n’hésitez pas à me les réclamer.</p>
+      </div>
+    </header>
+
+    <ol class="steps">
+      <li class="reveal"><b>Choisissez</b>Une photographie de la sélection ci-dessous, ou une autre du site.</li>
+      <li class="reveal" style="--d:.1s"><b>Demandez</b>Le bouton « Demander ce tirage » ouvre un message déjà prêt.</li>
+      <li class="reveal" style="--d:.2s"><b>Recevez un devis</b>Format, support, prix et livraison vous sont précisés avant tout engagement.</li>
+    </ol>
+
+    <div class="tirages">
+      {TIRAGES.map((p, i) => (
+        <figure class="tirage reveal" style={`--d:${((i % 2) * 0.1).toFixed(2)}s`}>
+          <div class="img">
+            <img src={p.src} width={p.w} height={p.h} alt={`${p.title} (${p.country}), photographie noir et blanc de Jean-Yves Caillot`} loading={i < 2 ? 'eager' : 'lazy'} decoding="async" draggable="false" />
+            <span class="protect-layer"></span>
+          </div>
+          <figcaption>
+            <span><span class="t">{p.title}</span><span class="c">{p.country}</span></span>
+            <a class="link-arrow" href={`/contact?tirage=${encodeURIComponent(`${p.title} (${p.country})`)}`}>Demander ce tirage</a>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <p class="tirages-end">Une autre photographie vous intéresse ? <a class="link-arrow" href="/contact">Me l’indiquer</a></p>
+  </div>
+</Base>

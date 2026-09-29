@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Mail from '../components/Mail.astro';
+---
+<Base title="Politique de confidentialité" description="Quelles données ce site collecte, pourquoi, combien de temps, et comment exercer vos droits (RGPD).">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Informations légales</span><h1>Politique de confidentialité</h1></header>
+    <div class="prose" style="padding-bottom:clamp(60px,9vw,120px)">
+      <p class="legal-date">Dernière mise à jour : 21 septembre 2026</p>
+      <p>Cette page explique, simplement, ce qui se passe avec vos données lorsque vous visitez ce site. En résumé : <strong>le site ne dépose aucun cookie publicitaire, ne vous suit pas d’un site à l’autre et ne vend aucune donnée.</strong></p>
+
+      <h2 class="sub">Qui est responsable ?</h2>
+      <p>Jean-Yves Caillot, photographe, éditeur du site. Contact : <Mail />.</p>
+
+      <h2 class="sub">Quelles données, pourquoi, combien de temps ?</h2>
+      <ul>
+        <li><strong>Message via le formulaire de contact ou par e-mail</strong> (nom, adresse e-mail, message). Finalité : répondre à votre demande (exposition, tirage, licence, renseignement). Base légale : votre demande / intérêt légitime à répondre. Le formulaire ne stocke rien sur le site : il ouvre votre messagerie avec le message prêt à envoyer. Conservation : le temps nécessaire à traiter votre demande, puis au plus 3 ans après notre dernier échange.</li>
+        <li><strong>Mesure d’audience, uniquement si vous l’acceptez</strong> (Vercel Web Analytics). Finalité : savoir quelles pages et galeries sont consultées, pour améliorer le site. Données : pages vues, page de provenance, pays, type d’appareil et de navigateur. Aucun cookie n’est déposé, aucun profil n’est constitué, aucun suivi entre sites n’est réalisé. Base légale : votre consentement, que vous pouvez retirer à tout moment. Si vous refusez, aucune mesure n’est faite et le site fonctionne exactement de la même manière.</li>
+        <li><strong>Journaux techniques de l’hébergeur</strong> (adresse IP, date et page demandée). Finalité : livrer le site et assurer sa sécurité. Base légale : intérêt légitime. Conservation : courte, selon les règles de l’hébergeur.</li>
+      </ul>
+
+      <h2 class="sub">Cookies et stockage local</h2>
+      <p>Le site ne dépose aucun cookie. Il enregistre uniquement, dans le stockage local de votre navigateur, <strong>votre choix concernant la mesure d’audience</strong> (accepté ou refusé), pour ne pas vous le redemander à chaque page. Ce choix est conservé au maximum 6 mois. Vous pouvez le modifier à tout moment avec le bouton « Gérer les cookies » en bas de chaque page.</p>
+      <p>Les polices de caractères sont hébergées avec le site : aucune donnée n’est envoyée à un service de polices tiers. Le site n’intègre ni réseaux sociaux, ni vidéos, ni publicités.</p>
+
+      <h2 class="sub">Qui reçoit vos données ?</h2>
+      <p>Uniquement l’éditeur du site et, pour l’hébergement et la mesure d’audience, la société Vercel Inc. (États-Unis), qui agit comme sous-traitant. Les transferts hors de l’Union européenne sont encadrés par les mécanismes prévus par le RGPD (clauses contractuelles types, cadre de protection des données UE–États-Unis). Vos données ne sont ni vendues ni cédées à des tiers.</p>
+
+      <h2 class="sub">Vos droits</h2>
+      <p>Vous pouvez à tout moment demander l’accès à vos données, leur rectification, leur effacement, la limitation ou l’opposition à leur traitement, ainsi que leur portabilité, et retirer votre consentement. Pour cela, écrivez à <Mail />. Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer">cnil.fr</a>).</p>
+
+      <h2 class="sub">Sécurité</h2>
+      <p>Toutes les pages sont servies en HTTPS (connexion chiffrée). Les photographies sont protégées par le droit d’auteur : voir les <a href="/cgu">conditions d’utilisation</a>.</p>
+
+      <p style="margin-top:2.4em"><a class="link-arrow" href="/mentions-legales">Mentions légales</a></p>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,150 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/chine-2",
+      "destination": "/galerie/chine",
+      "permanent": true
+    },
+    {
+      "source": "/cambodge",
+      "destination": "/galerie/cambodge",
+      "permanent": true
+    },
+    {
+      "source": "/inde",
+      "destination": "/galerie/inde",
+      "permanent": true
+    },
+    {
+      "source": "/birmanie",
+      "destination": "/galerie/birmanie",
+      "permanent": true
+    },
+    {
+      "source": "/indonesie",
+      "destination": "/galerie/indonesie",
+      "permanent": true
+    },
+    {
+      "source": "/laos",
+      "destination": "/galerie/laos",
+      "permanent": true
+    },
+    {
+      "source": "/maroc",
+      "destination": "/galerie/maroc",
+      "permanent": true
+    },
+    {
+      "source": "/egypte",
+      "destination": "/galerie/egypte",
+      "permanent": true
+    },
+    {
+      "source": "/kenya",
+      "destination": "/galerie/kenya",
+      "permanent": true
+    },
+    {
+      "source": "/etats-unis",
+      "destination": "/galerie/etats-unis",
+      "permanent": true
+    },
+    {
+      "source": "/colombie",
+      "destination": "/galerie/colombie",
+      "permanent": true
+    },
+    {
+      "source": "/france",
+      "destination": "/galerie/france",
+      "permanent": true
+    },
+    {
+      "source": "/italie",
+      "destination": "/galerie/italie",
+      "permanent": true
+    },
+    {
+      "source": "/a-propos-de",
+      "destination": "/a-propos",
+      "permanent": true
+    },
+    {
+      "source": "/articles-de-presse",
+      "destination": "/presse",
+      "permanent": true
+    },
+    {
+      "source": "/calendrier-expositions",
+      "destination": "/expositions",
+      "permanent": true
+    },
+    {
+      "source": "/https-jeanyvescaillot-com-permalien-https-jeanyvescaillot-com-conditions-dutilisation",
+      "destination": "/cgu",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noai, noimageai"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        }
+      ]
+    },
+    {
+      "source": "/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": ".*\\.vercel\\.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noai, noimageai"
+        }
+      ]
+    }
+  ]
+}

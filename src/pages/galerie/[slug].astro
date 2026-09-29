@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
+import { COUNTRIES } from '../../data/site.js';
+
+export function getStaticPaths() {
+  return COUNTRIES.map((c, i) => ({
+    params: { slug: c.slug },
+    props: { country: c, i, prev: COUNTRIES[(i - 1 + COUNTRIES.length) % COUNTRIES.length], next: COUNTRIES[(i + 1) % COUNTRIES.length] },
+  }));
+}
+const { country, prev, next, i } = Astro.props;
+const total = COUNTRIES.length;
+const cut = (t, n) => (t.length <= n ? t : t.slice(0, n).replace(/\s+\S*$/, '') + '…');
+const desc = cut(`${country.name} en noir et blanc : ${country.paras[0]}`, 155);
+---
+<Base dark title={`${country.name} : galerie photo`} description={desc}>
+  <div class="wrap">
+    <header class="page-head split">
+      <div>
+        <span class="idx">Galerie {String(i + 1).padStart(2, '0')} / {total} · {country.continent}</span>
+        <h1>{country.name}</h1>
+      </div>
+      <div class="text">{country.paras.map((p) => <p>{p}</p>)}</div>
+    </header>
+    <Gallery photos={country.photos} label={country.name} />
+  </div>
+  <nav class="next-prev" aria-label="Autres galeries">
+    <div class="wrap">
+      <a href={`/galerie/${prev.slug}`}><small>← Précédent</small><strong>{prev.name}</strong></a>
+      <a class="r" href={`/galerie/${next.slug}`}><small>Suivant →</small><strong>{next.name}</strong></a>
+    </div>
+  </nav>
+</Base>

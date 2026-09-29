@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { PRESS } from '../data/site.js';
+---
+<Base title="La presse en parle" current="/presse" description="Articles de presse consacrés aux expositions de photographies de Jean-Yves Caillot.">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Presse</span><h1>On parle de moi</h1></header>
+    <ul class="press-list">
+      {PRESS.map(([date, title, src, url]) => (
+        <li>
+          {url ? (
+            <a href={url} target="_blank" rel="noopener noreferrer"><span class="date">{date}</span><span class="t">{title}</span><span class="src">{src}<span class="arrow">↗</span></span></a>
+          ) : (
+            <div><span class="date">{date}</span><span class="t">{title}</span><span class="src">{src}</span></div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>

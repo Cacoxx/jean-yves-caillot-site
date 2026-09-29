@@ -1,0 +1,66 @@
+---
+interface Photo { src: string; thumb: string; w: number; h: number; title: string; }
+interface Props { photos: Photo[]; label?: string; }
+const { photos, label = 'Photographie' } = Astro.props;
+---
+<div class="gallery" data-gallery>
+  {photos.map((p, i) => (
+    <figure class="ph reveal" style={`--r:${(p.w / p.h).toFixed(3)};--d:${((i % 4) * 0.08).toFixed(2)}s`} data-full={p.src} data-title={p.title} data-i={i}>
+      <img src={p.thumb} width={Math.round(p.w * (800 / Math.max(p.w, p.h)))} height={Math.round(p.h * (800 / Math.max(p.w, p.h)))} alt={p.title ? `${p.title}${label && label !== 'Affiche' ? ` (${label})` : ''}, photographie noir et blanc de Jean-Yves Caillot` : 'Photographie noir et blanc de Jean-Yves Caillot'} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" draggable="false" />
+      {p.title && <figcaption class="cap">{p.title}</figcaption>}
+      <button type="button" aria-label={`Agrandir : ${p.title || label}`}></button>
+    </figure>
+  ))}
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visionneuse">
+  <button class="play" aria-label="Lancer le diaporama" aria-pressed="false"><svg viewBox="0 0 28 28"><path class="i-play" d="M9 5l14 9-14 9z"/><path class="i-pause" d="M9 5v18M19 5v18"/></svg></button>
+  <button class="close" aria-label="Fermer"><svg viewBox="0 0 28 28"><path d="M5 5l18 18M23 5L5 23"/></svg></button>
+  <button class="prev" aria-label="Photo précédente"><svg viewBox="0 0 28 28"><path d="M18 4L8 14l10 10"/></svg></button>
+  <button class="next" aria-label="Photo suivante"><svg viewBox="0 0 28 28"><path d="M10 4l10 10-10 10"/></svg></button>
+  <figure>
+    <div class="stage"><img id="lb-img" alt="" draggable="false" /><div class="shield"></div></div>
+    <figcaption id="lb-cap"></figcaption>
+  </figure>
+</div>
+
+<script>
+  const items = [...document.querySelectorAll('[data-gallery] .ph')];
+  const lb = document.getElementById('lb');
+  const img = document.getElementById('lb-img');
+  const cap = document.getElementById('lb-cap');
+  let cur = 0, touchX = null, timer = null;
+  const play = lb.querySelector('.play');
+  const stop = () => { clearInterval(timer); timer = null; play.setAttribute('aria-pressed', 'false'); };
+  const begin = () => { clearInterval(timer); timer = setInterval(() => show(cur + 1), 4500); play.setAttribute('aria-pressed', 'true'); };
+  play.addEventListener('click', () => (timer ? stop() : begin()));
+  const show = (i) => {
+    cur = (i + items.length) % items.length;
+    const el = items[cur];
+    img.classList.remove('ready');
+    img.onload = () => img.classList.add('ready');
+    img.src = el.dataset.full;
+    img.alt = el.dataset.title || '';
+    cap.innerHTML = `${el.dataset.title || ''}<small>${cur + 1} / ${items.length} · © Jean-Yves Caillot</small>`;
+    [items[(cur + 1) % items.length], items[(cur - 1 + items.length) % items.length]].forEach((n) => { new Image().src = n.dataset.full; });
+  };
+  const open = (i) => { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; lb.querySelector('.close').focus(); };
+  const close = () => { stop(); lb.classList.remove('open'); document.body.style.overflow = ''; img.removeAttribute('src'); };
+  items.forEach((el, i) => el.querySelector('button').addEventListener('click', () => open(i)));
+  lb.querySelector('.close').addEventListener('click', close);
+  lb.querySelector('.prev').addEventListener('click', () => { show(cur - 1); if (timer) begin(); });
+  lb.querySelector('.next').addEventListener('click', () => { show(cur + 1); if (timer) begin(); });
+  lb.addEventListener('click', (e) => { if (e.target === lb || e.target.tagName === 'FIGURE' || e.target.classList.contains('stage')) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  lb.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX; touchX = null;
+    if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1));
+  });
+</script>

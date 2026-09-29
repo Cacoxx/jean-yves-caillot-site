@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site.js';
+import Mail from '../components/Mail.astro';
+---
+<Base title="Mentions légales" description="Mentions légales et politique de confidentialité du site de Jean-Yves Caillot.">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Informations légales</span><h1>Mentions légales</h1></header>
+    <div class="prose" style="padding-bottom:clamp(60px,9vw,120px)">
+      <h2 class="sub">Éditeur du site</h2>
+      <p>Jean-Yves Caillot, photographe, éditeur et directeur de la publication.<br />Contact : <Mail /></p>
+
+      <h2 class="sub">Hébergement</h2>
+      <p>Vercel Inc.<br />440 N Barranca Ave #4133, Covina, CA 91723, États-Unis<br /><a href="https://vercel.com" target="_blank" rel="noopener noreferrer">vercel.com</a></p>
+
+      <h2 class="sub">Propriété intellectuelle</h2>
+      <p>L’ensemble des photographies, textes et éléments graphiques du site est protégé par le droit d’auteur. Voir les <a href="/cgu">conditions d’utilisation</a>.</p>
+
+      <h2 class="sub">Données personnelles et cookies</h2>
+      <p>Le site ne dépose aucun cookie publicitaire. La mesure d’audience n’est activée qu’avec votre accord. Tout le détail (données, durées, droits, CNIL) est dans la <a href="/confidentialite">politique de confidentialité</a>.</p>
+
+      <h2 class="sub">Liens externes</h2>
+      <p>Ce site contient des liens vers des sites tiers. L’éditeur n’exerce aucun contrôle sur leur contenu et décline toute responsabilité à leur égard.</p>
+    </div>
+  </div>
+</Base>

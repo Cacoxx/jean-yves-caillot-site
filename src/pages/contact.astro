@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import Mail from '../components/Mail.astro';
+import { SITE } from '../data/site.js';
+---
+<Base title="Contact" current="/contact" description="Contacter Jean-Yves Caillot : exposition, salon, événement culturel, tirage ou demande de photographies.">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Contact</span><h1>Prise de contact</h1></header>
+    <div class="contact-grid">
+      <div class="side prose">
+        <p>Un message, une idée, une question, une collaboration ?</p>
+        <p>Vous organisez une exposition, un salon ou un événement culturel et recherchez un exposant ? Si vous souhaitez voir plus de photos ou obtenir plus de renseignements sur certaines images, n’hésitez pas à me contacter pour en discuter.</p>
+        <p><Mail class="mailbig" /></p>
+        <div class="ph" style="--r:1;cursor:default"><img src="/img/extra/contact-t.webp" width="600" height="806" alt="La repasseuse : une femme repasse à même le sol, photographie noir et blanc de Jean-Yves Caillot" loading="eager" draggable="false" /><button type="button" tabindex="-1" aria-hidden="true" style="cursor:default"></button></div>
+      </div>
+
+      <div>
+      <p class="tirage-note" id="tirage-note" hidden>Demande de tirage : <strong id="tirage-name"></strong></p>
+      <form class="form" id="contact-form" data-u={SITE.mailUser} data-d={SITE.mailDomain} novalidate>
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input id="nom" name="nom" type="text" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="err-nom" />
+          <p class="err" id="err-nom" role="alert">Merci d’indiquer votre nom.</p>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="160" aria-describedby="err-email" />
+          <p class="err" id="err-email" role="alert">Merci d’indiquer une adresse e-mail valide (exemple : nom@domaine.fr).</p>
+        </div>
+        <div class="field">
+          <label for="sujet">Sujet <span style="text-transform:none;letter-spacing:0">(facultatif)</span></label>
+          <input id="sujet" name="sujet" type="text" maxlength="120" placeholder="Exposition, tirage, demande de photos…" />
+        </div>
+        <div class="field">
+          <label for="message">Message <span class="count" id="count">0 / 1500</span></label>
+          <textarea id="message" name="message" required minlength="10" maxlength="1500" aria-describedby="err-message"></textarea>
+          <p class="err" id="err-message" role="alert">Votre message est trop court (10 caractères minimum).</p>
+        </div>
+        <!-- Anti-spam : champ piège invisible pour les humains -->
+        <div class="hp" aria-hidden="true"><label for="website">Ne pas remplir</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+        <button class="btn dark" type="submit">Envoyer le message</button>
+        <p class="status" id="form-status" role="status" aria-live="polite"></p>
+        <p class="note">En cliquant, votre application de messagerie s’ouvre avec le message prêt à être envoyé à Jean-Yves Caillot. Vos données ne sont utilisées que pour répondre à votre demande (voir la <a href="/confidentialite">politique de confidentialité</a>).</p>
+      </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    const f = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    const msg = document.getElementById('message');
+    const count = document.getElementById('count');
+    const loadedAt = Date.now();
+    const rules = {
+      nom: (v) => v.trim().length >= 2,
+      email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()),
+      message: (v) => v.trim().length >= 10,
+    };
+    const setInvalid = (name, bad) => {
+      const el = f.elements[name];
+      el.setAttribute('aria-invalid', String(bad));
+      el.closest('.field').classList.toggle('invalid', bad);
+    };
+    Object.keys(rules).forEach((n) => {
+      f.elements[n].addEventListener('blur', () => setInvalid(n, !rules[n](f.elements[n].value)));
+      f.elements[n].addEventListener('input', () => { if (f.elements[n].getAttribute('aria-invalid') === 'true') setInvalid(n, !rules[n](f.elements[n].value)); });
+    });
+    msg.addEventListener('input', () => { count.textContent = `${msg.value.length} / 1500`; });
+
+    // Arrivée depuis la page « Tirages » : sujet et message déjà préparés
+    const tirage = (new URLSearchParams(location.search).get('tirage') || '').replace(/[\r\n]+/g, ' ').trim().slice(0, 140);
+    if (tirage) {
+      document.getElementById('sujet').value = `Demande de tirage : ${tirage}`;
+      if (!msg.value) {
+        msg.value = `Bonjour,\n\nJe souhaiterais recevoir un devis pour un tirage de « ${tirage} ».\n\nFormat souhaité :\nUsage (décoration, cadeau, collection…) :\n\nMerci d’avance.`;
+        count.textContent = `${msg.value.length} / 1500`;
+      }
+      document.getElementById('tirage-name').textContent = tirage;
+      document.getElementById('tirage-note').hidden = false;
+    }
+
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      status.className = 'status'; status.textContent = '';
+      // Anti-spam : champ piège rempli, ou formulaire envoyé en moins de 3 secondes (robot)
+      if (f.elements.website.value || Date.now() - loadedAt < 3000) { status.className = 'status error'; status.textContent = 'Votre message n’a pas pu être envoyé. Merci de réessayer dans un instant.'; return; }
+      let first = null;
+      Object.keys(rules).forEach((n) => { const bad = !rules[n](f.elements[n].value); setInvalid(n, bad); if (bad && !first) first = f.elements[n]; });
+      if (first) { first.focus(); status.className = 'status error'; status.textContent = 'Merci de corriger les champs signalés.'; return; }
+      // Anti-spam : trop de liens dans le message
+      if ((msg.value.match(/https?:\/\/|www\./gi) || []).length > 2) { status.className = 'status error'; status.textContent = 'Merci de limiter le nombre de liens dans votre message.'; msg.focus(); return; }
+      const d = new FormData(f);
+      const to = `${f.dataset.u}@${f.dataset.d}`;
+      const subject = String(d.get('sujet')).trim() || 'Message depuis jeanyvescaillot.com';
+      const body = `${String(d.get('message')).trim()}\n\n${String(d.get('nom')).trim()}\n${String(d.get('email')).trim()}`;
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      status.textContent = `Votre messagerie s’ouvre. Si rien ne se passe, écrivez directement à ${to}.`;
+    });
+  </script>
+</Base>

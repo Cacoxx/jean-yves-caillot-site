@@ -1,0 +1,36 @@
+# Les photographies de ce site sont protégées par le droit d'auteur.
+# Aucune utilisation pour l'entraînement d'IA ou le moissonnage d'images n'est autorisée.
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: OAI-SearchBot
+Disallow: /img/
+User-agent: CCBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /
+User-agent: Amazonbot
+Disallow: /
+User-agent: FacebookBot
+Disallow: /
+User-agent: Applebot-Extended
+Disallow: /
+User-agent: cohere-ai
+Disallow: /
+User-agent: Diffbot
+Disallow: /
+User-agent: ImagesiftBot
+Disallow: /
+User-agent: *
+Allow: /
+
+Sitemap: https://jeanyvescaillot.com/sitemap-index.xml

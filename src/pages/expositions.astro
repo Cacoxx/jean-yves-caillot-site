@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Gallery from '../components/Gallery.astro';
+import { EXPOS_RECENT, EXPOS_OLD, POSTERS } from '../data/site.js';
+const photos = POSTERS.map((p) => ({ src: p.src, thumb: p.thumb, w: p.w, h: p.h, title: p.title }));
+---
+<Base dark title="Expositions" current="/expositions" description="Calendrier des expositions de photographies argentiques de Jean-Yves Caillot, de 1977 à aujourd’hui.">
+  <div class="wrap">
+    <header class="page-head"><span class="eyebrow">Expositions</span><h1>Calendrier</h1></header>
+
+    <h2 class="subhead">Expositions récentes</h2>
+    <ul class="timeline">
+      {EXPOS_RECENT.map(([y, t, l, d]) => (
+        <li><span class="y">{y}</span><span class="t">{t}<small>{l}</small></span><span class="d">{d || ''}</span></li>
+      ))}
+    </ul>
+
+    <h2 class="subhead">Années 70 à 90</h2>
+    <ul class="timeline">
+      {EXPOS_OLD.map(([y, t, l, d]) => (
+        <li><span class="y">{y}</span><span class="t">{t}<small>{l}</small></span><span class="d">{d || ''}</span></li>
+      ))}
+    </ul>
+
+    <h2 class="subhead">Affiches</h2>
+    <Gallery photos={photos} label="Affiche" />
+  </div>
+</Base>

@@ -1,0 +1,190 @@
+---
+import '../styles/global.css';
+import { SITE, CONTINENTS, COUNTRIES } from '../data/site.js';
+import fontSerif from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2?url';
+import fontSans from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+
+interface Props { title?: string; description?: string; home?: boolean; image?: string; current?: string; dark?: boolean; }
+const { title, description = 'Jean-Yves Caillot, photographe : portraits et instants de vie captés en noir et blanc argentique, autour du monde depuis 1975.', home = false, image = '/og-image.jpg', current = '', dark = false } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | Photographe, voyages en noir et blanc`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+const nav = [
+  ['/a-propos', 'À propos'],
+  ['/expositions', 'Expositions'],
+  ['/tirages', 'Tirages'],
+  ['/presse', 'Presse'],
+];
+const jsonld = home ? {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: SITE.name, url: Astro.site.href, inLanguage: 'fr-FR' },
+    { '@type': 'Person', name: SITE.name, jobTitle: 'Photographe', url: Astro.site.href, image: ogImage,
+      description: 'Photographe argentique noir et blanc, voyages et portraits depuis 1975.' },
+  ],
+} : null;
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="preload" href={fontSerif} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={fontSans} as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+  <meta name="robots" content={SITE.live ? 'index, follow, noai, noimageai' : 'noindex, nofollow, noai, noimageai'} />
+  <meta name="copyright" content="© Jean-Yves Caillot. Tous droits réservés" />
+  <meta name="author" content="Jean-Yves Caillot" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Lever de soleil sur Angkor Vat, photographie noir et blanc de Jean-Yves Caillot" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+  <slot name="head" />
+</head>
+<body class={[home ? 'home' : '', dark ? 'dark' : ''].join(' ').trim()}>
+  <slot name="overlay" />
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="site-header" id="header">
+    <div class="wrap">
+      <a class="brand" href="/">{SITE.name}</a>
+      <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <div class="dd">
+          <button class="dd-btn" type="button" aria-haspopup="true">Galeries</button>
+          <div class="dd-panel">
+            {CONTINENTS.map((c) => (
+              <div>
+                <span class="dd-h">{c.name}</span>
+                {c.keys.map((k) => { const co = COUNTRIES.find((x) => x.dir === k); return <a href={`/galerie/${co.slug}`}>{co.name}</a>; })}
+              </div>
+            ))}
+          </div>
+        </div>
+        {nav.map(([href, label]) => <a href={href} aria-current={current === href ? 'page' : undefined}>{label}</a>)}
+        <a class="cta-nav" href="/contact" aria-current={current === '/contact' ? 'page' : undefined}>Me contacter</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu"><slot /></main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <a class="brand" href="/">{SITE.name}</a>
+          <p class="protect">Photographies argentiques en noir et blanc. Toutes les images de ce site sont protégées : toute reproduction ou utilisation sans l’autorisation écrite de l’auteur est interdite.</p>
+        </div>
+        <div>
+          <span class="fh">Galeries</span>
+          <ul>{COUNTRIES.slice(0, 7).map((c) => <li><a href={`/galerie/${c.slug}`}>{c.name}</a></li>)}</ul>
+        </div>
+        <div>
+          <span class="fh">&nbsp;</span>
+          <ul>{COUNTRIES.slice(7).map((c) => <li><a href={`/galerie/${c.slug}`}>{c.name}</a></li>)}</ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>© {SITE.year} Jean-Yves Caillot. Tous droits réservés</span>
+        <nav aria-label="Informations légales">
+          <a href="/cgu">Conditions d’utilisation</a>
+          <a href="/confidentialite">Confidentialité</a>
+          <a href="/mentions-legales">Mentions légales</a>
+          <button type="button" id="cookie-settings">Gérer les cookies</button>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <div class="consent" id="consent" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
+    <h2 id="consent-title">Votre vie privée</h2>
+    <p id="consent-text">Ce site ne dépose aucun cookie publicitaire. Avec votre accord, il mesure sa fréquentation de façon anonyme et sans cookie, pour savoir quelles galeries vous intéressent. <a href="/confidentialite">En savoir plus</a></p>
+    <div class="consent-btns">
+      <button type="button" id="consent-refuse">Refuser</button>
+      <button type="button" id="consent-accept">Accepter</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Photographies protégées. © Jean-Yves Caillot. Pour toute utilisation, merci de me contacter.</div>
+
+  <script>
+    const header = document.getElementById('header');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+    onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+    const burger = document.querySelector('.burger');
+    const nav = document.getElementById('nav');
+    burger.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      document.body.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    });
+    nav.addEventListener('click', (e) => { if (e.target.closest('a')) { nav.classList.remove('open'); document.body.classList.remove('menu-open'); } });
+
+    // Adresse e-mail reconstituée côté navigateur (invisible pour les robots de collecte)
+    document.querySelectorAll('.js-mail').forEach((el) => {
+      const addr = `${el.dataset.u}@${el.dataset.d}`;
+      const a = document.createElement('a');
+      a.href = `mailto:${addr}`; a.textContent = addr;
+      if (el.dataset.class) a.className = el.dataset.class;
+      el.replaceWith(a);
+    });
+
+    // Apparition douce des éléments au défilement
+    const reveals = [...document.querySelectorAll('.reveal')];
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
+      reveals.forEach((el) => io.observe(el));
+    } else reveals.forEach((el) => el.classList.add('in'));
+
+    // --- Consentement & mesure d'audience (Vercel Web Analytics, sans cookie, chargée seulement après accord) ---
+    const KEY = 'jyc-consent', SIX_MONTHS = 1000 * 60 * 60 * 24 * 180;
+    const banner = document.getElementById('consent');
+    const getConsent = () => { try { const v = JSON.parse(localStorage.getItem(KEY)); if (v && Date.now() - v.t < SIX_MONTHS) return v.v; } catch (e) {} return null; };
+    const setConsent = (v) => { try { localStorage.setItem(KEY, JSON.stringify({ v, t: Date.now() })); } catch (e) {} };
+    const loadAnalytics = () => {
+      if (window.__jycVa) return; window.__jycVa = true;
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      const s = document.createElement('script'); s.defer = true; s.src = '/_vercel/insights/script.js'; document.head.appendChild(s);
+    };
+    const showBanner = () => { banner.hidden = false; requestAnimationFrame(() => banner.classList.add('show')); };
+    const hideBanner = () => { banner.classList.remove('show'); setTimeout(() => (banner.hidden = true), 300); };
+    const c = getConsent();
+    if (c === 'granted') loadAnalytics(); else if (c === null) setTimeout(showBanner, 900);
+    document.getElementById('consent-accept').addEventListener('click', () => { setConsent('granted'); loadAnalytics(); hideBanner(); });
+    document.getElementById('consent-refuse').addEventListener('click', () => { setConsent('denied'); hideBanner(); });
+    document.getElementById('cookie-settings').addEventListener('click', showBanner);
+
+    // --- Protection des photographies (dissuasion : clic droit, glisser-déposer, appui long) ---
+    const toast = document.getElementById('toast');
+    let t;
+    const warn = () => { toast.classList.add('show'); clearTimeout(t); t = setTimeout(() => toast.classList.remove('show'), 3200); };
+    const zone = '.ph, .card, .hero, .poster, .lb, .portrait, .frame, img';
+    document.addEventListener('contextmenu', (e) => { if (e.target.closest(zone)) { e.preventDefault(); warn(); } });
+    document.addEventListener('dragstart', (e) => { if (e.target.closest && e.target.closest(zone)) e.preventDefault(); });
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['s', 'p', 'u'].includes(e.key.toLowerCase()) && document.querySelector('.gallery, .lb.open')) { e.preventDefault(); warn(); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTINENTS, COUNTRIES, HERO_SLIDES, PORTRAIT, EXPOS_RECENT, POSTERS, STRIP, SHOWCASE, LENS_PHOTOS } from '../data/site.js';
+const recent = EXPOS_RECENT.slice(0, 4);
+const poster = POSTERS[0];
+let n = 0;
+---
+<Base home>
+  <script slot="head" is:inline>
+    try {
+      var ua = navigator.userAgent, forced = /[?&]intro/.test(location.search);
+      if ((forced || (!sessionStorage.getItem('jyc-intro') && !location.hash && !navigator.webdriver && !/bot|crawl|spider|lighthouse|pagespeed|headless/i.test(ua))) && location.pathname === '/') document.documentElement.classList.add('intro-active');
+    } catch (e) {}
+  </script>
+  <div slot="overlay" class="intro-lens" id="intro" role="dialog" aria-label="Introduction" aria-modal="true">
+    <p class="lens-kicker">Jean-Yves Caillot · Photographe</p>
+    <div class="lens-tilt" id="lens-tilt">
+      <div class="lens" id="lens">
+        <div class="lens-barrel"></div>
+        <div class="lens-glass">
+          <div class="lens-photos" id="lens-photos">
+            {LENS_PHOTOS.map((p, i) => <img {...(i === 0 ? { src: p.src, class: 'on', fetchpriority: 'high' } : { 'data-src': p.src })} alt="" width={p.w} height={p.h} draggable="false" />)}
+          </div>
+          <div class="lens-shade"></div>
+        </div>
+        <button class="lens-btn" id="enter" type="button">Découvrir les photographies</button>
+      </div>
+    </div>
+    <button class="lens-skip" id="skip" type="button">Passer l’introduction</button>
+  </div>
+  <link slot="head" rel="preload" as="image" href={HERO_SLIDES[0].src} type="image/webp" fetchpriority="high" />
+  <section class="hero" data-hero>
+    <div class="slides">
+      {HERO_SLIDES.map((s, i) => (
+        <div class={`slide${i === 0 ? ' on' : ''}`} data-cap={s.title.replace(/\.$/, '')} data-country={s.country} data-href={`/galerie/${s.slug}`}>
+          <img {...(i === 0 ? { src: s.src, fetchpriority: 'high' } : { 'data-src': s.src })} alt={`${s.title} (${s.country})`} width={s.w} height={s.h} style={`object-position:${s.pos}`} draggable="false" />
+        </div>
+      ))}
+    </div>
+    <div class="grain"></div>
+    <div class="wrap">
+      <span class="eyebrow">Photographe · Argentique noir &amp; blanc</span>
+      <h1>Jean-Yves <em>Caillot</em></h1>
+      <p class="lead">Des visages, des lumières et des instants de vie rapportés des quatre coins du monde, depuis 1975.</p>
+    </div>
+    <div class="hero-meta">
+      <a href={`/galerie/${HERO_SLIDES[0].slug}`} id="hero-cap">{HERO_SLIDES[0].title.replace(/\.$/, '')}<small>{HERO_SLIDES[0].country}</small></a>
+      <div class="dots" role="group" aria-label="Choisir une photo">
+        {HERO_SLIDES.map((_, i) => <button type="button" class={i === 0 ? 'on' : ''} aria-label={`Photo ${i + 1}`}></button>)}
+      </div>
+    </div>
+    <span class="scroll-cue" aria-hidden="true"></span>
+  </section>
+
+  <section class="showcase" aria-label="Sélection de photographies">
+    <div class="wrap showcase-head">
+      <span class="eyebrow">Sélection</span>
+      <h2 class="reveal">Quelques images <em>pour commencer</em></h2>
+    </div>
+    {SHOWCASE.map((p, i) => (
+      <a class="show" href={`/galerie/${p.slug}`} aria-label={`${p.title} : voir la galerie ${p.country}`}>
+        <div class="show-img"><img src={p.src} width={p.w} height={p.h} alt={`${p.title} (${p.country}), photographie noir et blanc de Jean-Yves Caillot`} loading="lazy" decoding="async" draggable="false" /></div>
+        <div class="show-cap reveal">
+          <span><span class="c">{String(i + 1).padStart(2, '0')} / {String(SHOWCASE.length).padStart(2, '0')} · {p.country}</span><span class="t">{p.title}</span></span>
+          <span class="go">Voir la galerie</span>
+        </div>
+      </a>
+    ))}
+  </section>
+
+  <section class="block">
+    <div class="wrap intro">
+      <div class="portrait reveal"><img src={PORTRAIT} alt="Portrait de Jean-Yves Caillot" width="900" height="894" loading="lazy" draggable="false" /></div>
+      <div class="reveal" style="--d:.15s">
+        <span class="eyebrow">Le regard</span>
+        <h2>La passion du <em>noir et blanc</em></h2>
+        <p>La passion pour la photographie en noir et blanc m’est venue dès l’adolescence. Faire des prises de vue puis passer des heures au labo pour développer et tirer les images occupait tous mes loisirs.</p>
+        <p>Plus tard, j’ai été curieux d’aller voir ce qui se passait plus loin, ailleurs. Mon intérêt pour les voyages m’a amené sur tous les continents du monde. Lors des séjours à l’étranger qui jalonnent ma vie jusqu’à ce jour, j’ai toujours tenté de capturer l’authenticité du peuple et de la culture de chaque pays que j’ai eu la chance de découvrir.</p>
+        <p class="quote">L’essence de ma photographie est de saisir les émotions humaines par surprise et sans altération.</p>
+        <p>Le cours du Nil du Soudan aux rives égyptiennes de la Méditerranée, la Chine de Mao, la jungle de Bornéo et les tribus animistes de Sulawesi, les déserts ventés du nord du Kenya, le sous-continent indien…</p>
+        <a class="link-arrow" href="/a-propos">Lire la suite</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Planche contact : aperçu des galeries">
+    <div class="track">
+      {[0, 1].map((k) => STRIP.map((f) => (
+        <a class="frame" href={`/galerie/${f.slug}`} tabindex={k ? -1 : undefined} aria-hidden={k ? 'true' : undefined}>
+          <img src={f.thumb} alt={k ? '' : f.alt} width={f.w} height={f.h} loading="lazy" draggable="false" />
+        </a>
+      )))}
+    </div>
+  </section>
+
+  <section class="block index-sec" id="galeries">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="eyebrow">Galeries</span><h2>Voyages, <em>pays par pays</em></h2></div>
+        <p>Treize galeries, comme une vitrine de mon style et de ma façon de capter l’image. Toutes les photographies sont consultables sur demande.</p>
+      </div>
+      <ul class="index" id="index">
+        {CONTINENTS.map((c) => (
+          <>
+            <li class="cont">{c.label || c.name}</li>
+            {c.keys.map((k) => { const co = COUNTRIES.find((x) => x.dir === k); n += 1; return (
+              <li>
+                <a class="row reveal" href={`/galerie/${co.slug}`} data-img={co.cover.thumb}>
+                  <span class="n">{String(n).padStart(2, '0')}</span>
+                  <img class="thumb" src={co.cover.tiny} alt="" width="62" height="78" loading="lazy" draggable="false" style={`object-position:${co.pos}`} />
+                  <span class="name">{co.name}</span>
+                  <span class="meta"><span>{co.photos.length} photographies</span><i>→</i></span>
+                </a>
+              </li>
+            ); })}
+          </>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <div class="peek" id="peek" aria-hidden="true"><img alt="" /></div>
+
+  <section class="block expo-band">
+    <div class="wrap grid">
+      <div class="poster reveal"><img src={poster.thumb} alt={poster.title} width={Math.round(poster.w * 500 / poster.h)} height="500" loading="lazy" draggable="false" /></div>
+      <div class="reveal" style="--d:.15s">
+        <span class="eyebrow">Expositions</span>
+        <h2>Photographies argentiques, <em>à voir en vrai</em></h2>
+        <p>Depuis 1977, en France comme à l’étranger, les tirages voyagent de galerie en galerie.</p>
+        <ul>
+          {recent.map(([y, t, l]) => <li><b>{y}</b><span>{t}<em>{l}</em></span></li>)}
+        </ul>
+        <a class="link-arrow" href="/expositions">Toutes les expositions</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block cta">
+    <div class="wrap narrow reveal" style="margin:auto">
+      <span class="eyebrow">Contact</span>
+      <h2>Une exposition, une question, <em>une collaboration ?</em></h2>
+      <p>Vous organisez une exposition, un salon ou un événement culturel et recherchez un exposant ? Vous souhaitez voir plus de photos, ou acquérir un tirage ? Écrivez-moi.</p>
+      <a class="btn dark" href="/contact">Me contacter</a>
+    </div>
+  </section>
+
+  <script>
+    // ---- Introduction : l'objectif ----
+    const introEl = document.getElementById('intro');
+    const inertTargets = document.querySelectorAll('.site-header, main, .site-footer');
+    if (document.documentElement.classList.contains('intro-active')) {
+      inertTargets.forEach((el) => { el.inert = true; });
+      const photos = [...document.querySelectorAll('#lens-photos img')];
+      let li = 0;
+      window.addEventListener('load', () => photos.forEach((im) => { if (im.dataset.src) im.src = im.dataset.src; }));
+      const cycle = setInterval(() => { photos[li].classList.remove('on'); li = (li + 1) % photos.length; photos[li].classList.add('on'); }, 3400);
+      const tilt = document.getElementById('lens-tilt');
+      const lens = document.getElementById('lens');
+      introEl.addEventListener('pointermove', (e) => {
+        const x = (e.clientX / innerWidth - 0.5) * 2, y = (e.clientY / innerHeight - 0.5) * 2;
+        tilt.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`); tilt.style.setProperty('--ry', `${(x * 9).toFixed(2)}deg`);
+        lens.style.setProperty('--tx', (x * -16).toFixed(1)); lens.style.setProperty('--ty', (y * -16).toFixed(1));
+      });
+      const finish = () => {
+        clearInterval(cycle);
+        inertTargets.forEach((el) => { el.inert = false; });
+        document.documentElement.classList.remove('intro-active');
+        try { sessionStorage.setItem('jyc-intro', '1'); } catch (e) {}
+        introEl.remove();
+      };
+      const enter = () => {
+        if (introEl.classList.contains('opening')) return;
+        const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const W = lens.getBoundingClientRect().width;
+        const zoom = Math.max(3, (Math.hypot(innerWidth, innerHeight) / 2) / (0.33 * W) * 1.08);
+        lens.style.setProperty('--zoom', zoom);
+        introEl.classList.add('opening');
+        setTimeout(() => introEl.classList.add('done'), calm ? 50 : 1250);
+        setTimeout(finish, calm ? 500 : 1950);
+      };
+      document.getElementById('enter').addEventListener('click', enter);
+      document.getElementById('skip').addEventListener('click', () => { introEl.classList.add('opening', 'done'); setTimeout(finish, 450); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.getElementById('intro')) { introEl.classList.add('opening', 'done'); setTimeout(finish, 450); } });
+      document.getElementById('enter').focus({ preventScroll: true });
+    } else if (introEl) { introEl.remove(); }
+
+    // ---- Sélection : léger effet de profondeur au défilement ----
+    const shows = [...document.querySelectorAll('.show')];
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let ticking = false;
+      const upd = () => {
+        ticking = false;
+        const vh = innerHeight;
+        shows.forEach((sEl) => {
+          const r = sEl.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > vh) return;
+          sEl.style.setProperty('--py', `${(-((r.top + r.height / 2 - vh / 2) / vh) * 70).toFixed(1)}px`);
+        });
+      };
+      addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(upd); } }, { passive: true });
+      upd();
+    }
+
+    // Diaporama : les photos suivantes ne se chargent qu'une fois la première affichée
+    window.addEventListener('load', () => setTimeout(() => document.querySelectorAll('.hero img[data-src]').forEach((im) => { im.src = im.dataset.src; }), 800));
+    const hero = document.querySelector('[data-hero]');
+    const slides = [...hero.querySelectorAll('.slide')];
+    const dots = [...hero.querySelectorAll('.dots button')];
+    const cap = document.getElementById('hero-cap');
+    let cur = 0, timer;
+    const go = (i) => {
+      slides[cur].classList.remove('on'); dots[cur].classList.remove('on');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('on'); dots[cur].classList.add('on');
+      const s = slides[cur];
+      cap.href = s.dataset.href;
+      cap.innerHTML = `${s.dataset.cap}<small>${s.dataset.country}</small>`;
+    };
+    const start = () => { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => go(cur + 1), 6500); };
+    dots.forEach((d, i) => d.addEventListener('click', () => { go(i); start(); }));
+    document.addEventListener('visibilitychange', () => (document.hidden ? clearInterval(timer) : start()));
+    start();
+
+    // Aperçu au survol de la liste des pays (ordinateur)
+    const peek = document.getElementById('peek');
+    const peekImg = peek.querySelector('img');
+    if (matchMedia('(hover: hover) and (min-width: 901px)').matches) {
+      let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+      const loop = () => { x += (tx - x) * 0.16; y += (ty - y) * 0.16; peek.style.transform = `translate(${x}px, ${y}px)`; raf = requestAnimationFrame(loop); };
+      document.querySelectorAll('#index .row').forEach((row) => {
+        row.addEventListener('mouseenter', () => { peekImg.src = row.dataset.img; peek.classList.add('on'); if (!raf) loop(); });
+        row.addEventListener('mouseleave', () => { peek.classList.remove('on'); });
+        row.addEventListener('mousemove', (e) => { tx = e.clientX + 36; ty = e.clientY - peek.offsetHeight / 2; if (!x && !y) { x = tx; y = ty; } });
+      });
+    }
+  </script>
+</Base>

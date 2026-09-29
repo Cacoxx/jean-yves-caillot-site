@@ -1,0 +1,6 @@
+---
+import { SITE } from '../data/site.js';
+interface Props { class?: string; }
+const { class: cls = '' } = Astro.props;
+---
+<span class="js-mail" data-u={SITE.mailUser} data-d={SITE.mailDomain} data-class={cls}>{SITE.mailUser} [arobase] {SITE.mailDomain}</span>
