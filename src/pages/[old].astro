@@ -1,0 +1,23 @@
+---
+import { OLD_REDIRECTS } from '../data/oldRedirects.js';
+
+export function getStaticPaths() {
+  return OLD_REDIRECTS.map(([old, to]) => ({ params: { old }, props: { to } }));
+}
+const { to } = Astro.props;
+const dest = new URL(to, Astro.site).href;
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="refresh" content={`0;url=${to}`} />
+  <link rel="canonical" href={dest} />
+  <meta name="robots" content="noindex, follow" />
+  <title>Redirection…</title>
+</head>
+<body>
+  <p>Cette page a déménagé. <a href={to}>Continuer vers la nouvelle page</a>.</p>
+  <script>location.replace(document.querySelector('link[rel="canonical"]').href.replace(location.origin, ''))</script>
+</body>
+</html>
