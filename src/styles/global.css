@@ -450,6 +450,9 @@ main p:not(.lead):not(.pull):not(.quote):not(.tirages-end):not(.status):not(.not
 .home .site-header:not(.scrolled) .wrap { background: rgba(8,8,8,.32); border-color: rgba(255,255,255,.22); box-shadow: none; }
 .nav a.cta-nav { border-radius: 999px; padding: 13px 24px; }
 .brand { font-size: 25px; }
+@media (min-width: 961px) {
+  .site-header .wrap { width: max-content; }
+}
 @media (max-width: 960px) {
   :root { --header-h: 88px; }
   .site-header .wrap { padding: 6px 8px; justify-content: flex-end; backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--bg); }
