@@ -1,33 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CONTINENTS, COUNTRIES, HERO_SLIDES, PORTRAIT, EXPOS_RECENT, POSTERS, STRIP, SHOWCASE, LENS_PHOTOS } from '../data/site.js';
+import { CONTINENTS, COUNTRIES, HERO_SLIDES, PORTRAIT, EXPOS_RECENT, POSTERS, STRIP, SHOWCASE } from '../data/site.js';
 const recent = EXPOS_RECENT.slice(0, 4);
 const poster = POSTERS[0];
 let n = 0;
 ---
 <Base home>
-  <script slot="head" is:inline>
-    try {
-      var ua = navigator.userAgent, forced = /[?&]intro/.test(location.search);
-      if ((forced || (!sessionStorage.getItem('jyc-intro') && !location.hash && !navigator.webdriver && !/bot|crawl|spider|lighthouse|pagespeed|headless/i.test(ua))) && location.pathname === '/') document.documentElement.classList.add('intro-active');
-    } catch (e) {}
-  </script>
-  <div slot="overlay" class="intro-lens" id="intro" role="dialog" aria-label="Introduction" aria-modal="true">
-    <p class="lens-kicker">Jean-Yves Caillot · Photographe</p>
-    <div class="lens-tilt" id="lens-tilt">
-      <div class="lens" id="lens">
-        <div class="lens-barrel"></div>
-        <div class="lens-glass">
-          <div class="lens-photos" id="lens-photos">
-            {LENS_PHOTOS.map((p, i) => <img {...(i === 0 ? { src: p.src, class: 'on', fetchpriority: 'high' } : { 'data-src': p.src })} alt="" width={p.w} height={p.h} draggable="false" />)}
-          </div>
-          <div class="lens-shade"></div>
-        </div>
-        <button class="lens-btn" id="enter" type="button">Découvrir les photographies</button>
-      </div>
-    </div>
-    <button class="lens-skip" id="skip" type="button">Passer l’introduction</button>
-  </div>
   <link slot="head" rel="preload" as="image" href={HERO_SLIDES[0].src} type="image/webp" fetchpriority="high" />
   <section class="hero" data-hero>
     <div class="slides">
@@ -145,45 +123,6 @@ let n = 0;
   </section>
 
   <script>
-    // ---- Introduction : l'objectif ----
-    const introEl = document.getElementById('intro');
-    const inertTargets = document.querySelectorAll('.site-header, main, .site-footer');
-    if (document.documentElement.classList.contains('intro-active')) {
-      inertTargets.forEach((el) => { el.inert = true; });
-      const photos = [...document.querySelectorAll('#lens-photos img')];
-      let li = 0;
-      window.addEventListener('load', () => photos.forEach((im) => { if (im.dataset.src) im.src = im.dataset.src; }));
-      const cycle = setInterval(() => { photos[li].classList.remove('on'); li = (li + 1) % photos.length; photos[li].classList.add('on'); }, 3400);
-      const tilt = document.getElementById('lens-tilt');
-      const lens = document.getElementById('lens');
-      introEl.addEventListener('pointermove', (e) => {
-        const x = (e.clientX / innerWidth - 0.5) * 2, y = (e.clientY / innerHeight - 0.5) * 2;
-        tilt.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`); tilt.style.setProperty('--ry', `${(x * 9).toFixed(2)}deg`);
-        lens.style.setProperty('--tx', (x * -16).toFixed(1)); lens.style.setProperty('--ty', (y * -16).toFixed(1));
-      });
-      const finish = () => {
-        clearInterval(cycle);
-        inertTargets.forEach((el) => { el.inert = false; });
-        document.documentElement.classList.remove('intro-active');
-        try { sessionStorage.setItem('jyc-intro', '1'); } catch (e) {}
-        introEl.remove();
-      };
-      const enter = () => {
-        if (introEl.classList.contains('opening')) return;
-        const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const W = lens.getBoundingClientRect().width;
-        const zoom = Math.max(3, (Math.hypot(innerWidth, innerHeight) / 2) / (0.33 * W) * 1.08);
-        lens.style.setProperty('--zoom', zoom);
-        introEl.classList.add('opening');
-        setTimeout(() => introEl.classList.add('done'), calm ? 50 : 1250);
-        setTimeout(finish, calm ? 500 : 1950);
-      };
-      document.getElementById('enter').addEventListener('click', enter);
-      document.getElementById('skip').addEventListener('click', () => { introEl.classList.add('opening', 'done'); setTimeout(finish, 450); });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.getElementById('intro')) { introEl.classList.add('opening', 'done'); setTimeout(finish, 450); } });
-      document.getElementById('enter').focus({ preventScroll: true });
-    } else if (introEl) { introEl.remove(); }
-
     // ---- Sélection : léger effet de profondeur au défilement ----
     const shows = [...document.querySelectorAll('.show')];
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {

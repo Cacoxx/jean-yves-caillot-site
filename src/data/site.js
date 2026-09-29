@@ -158,5 +158,3 @@ export const TIRAGES = TIRAGES_IDS.map(([dir, n]) => {
 // Accueil : grandes photos plein écran (originaux haute définition)
 const pick = (dir, n) => { const c = byDir(dir); const p = c.photos[n - 1]; return { ...p, title: p.title.replace(/\.$/, ''), country: c.name, slug: c.slug }; };
 export const SHOWCASE = [pick('kenya', 8), pick('inde', 2), pick('kenya', 7), pick('indonesie', 5), pick('inde', 7), pick('kenya', 10)];
-// Photos qui défilent dans la lentille de l'introduction
-export const LENS_PHOTOS = [pick('cambodge', 6), pick('inde', 3), pick('kenya', 9), pick('kenya', 4)];
